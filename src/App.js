@@ -4,8 +4,17 @@ import "./App.css";
 function App() {
   const [todo, setTodo] = useState("");
   const [todos, setTodos] = useState([]);
+  const [editId, seteditId] = useState(0);
+
+  const handleEdit = (selectedelementId) => {
+    const editTodo = todos.find((i) => (i.id===selectedelementId));
+    setTodo(editTodo.todo);
+    seteditId(selectedelementId);
+  };
+
 
   const handleDelete = (idWeWantToDelete) => {
+
     // creating a new list without that deleted element
     const delTodo = todos.filter((ele) => ele.id !== idWeWantToDelete);
     setTodos([...delTodo]);
@@ -14,6 +23,17 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if(editId){
+      const editTodo = todos.find((i) => (i.id===editId));
+      const updatedTodos = todos.map((ele) => ele.id===editTodo.id ?
+       (ele ={id:ele.id,todo}):{id:ele.id,todo:ele.todo});
+
+       setTodo("");
+       seteditId(0);
+       setTodos(updatedTodos);
+       return;
+
+    }
 
     if (todo !== "") {
       setTodos([{ id: `${Date.now()}`, todo }, ...todos]);
@@ -32,7 +52,7 @@ function App() {
             value={todo}
             onChange={(e) => setTodo(e.target.value)}
           />
-          <button type="submit">Submit</button>
+          <button type="submit">{editId ? "Edit":"Add"}</button>
         </form>
 
         <ul className="allTodos">
@@ -42,7 +62,7 @@ function App() {
                 <span className="todoText" key={t.id}>
                   {t.todo}
                 </span>
-                <button>edit</button>
+                <button onClick={() => handleEdit(t.id)}>edit</button>
                 <button onClick={() => handleDelete(t.id)}>delete</button>
               </li>
             );
