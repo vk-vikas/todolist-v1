@@ -5,10 +5,13 @@ function App() {
   const [todo, setTodo] = useState("");
   const [todos, setTodos] = useState([]);
 
-  const handleDelete = (e) => {
-    const delTodo = todos.filter((to) => e.to !== to);
+  const handleDelete = (idWeWantToDelete) => {
+    // creating a new list without that deleted element
+    const delTodo = todos.filter((ele) => ele.id !== idWeWantToDelete);
     setTodos([...delTodo]);
   };
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -17,6 +20,8 @@ function App() {
       setTodo("");
     }
   };
+
+
   return (
     <div className="App">
       <div className="container">
